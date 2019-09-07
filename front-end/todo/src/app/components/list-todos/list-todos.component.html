@@ -1,0 +1,17 @@
+<table>
+  <caption>My todo List</caption>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Desciption</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let todo of todos">
+      <td>{{todo.id}}</td>
+      <td>{{todo.targetDate | date}}</td> <!-- Angular pipe (|) -->
+      <td>{{todo.description | uppercase}}</td>
+      <td>{{todo.done}}</td>
+    </tr>
+  </tbody>
+</table>
