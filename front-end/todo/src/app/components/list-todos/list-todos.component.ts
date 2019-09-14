@@ -7,8 +7,7 @@ export class Todo {
     public description: string,
     public done: boolean,
     public targetDate: Date
-  ) {
-  }
+  ) {}
 }
 
 @Component({

@@ -1,0 +1,24 @@
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div>
+      <a routerLink="/" class="navbar-brand">ToDo Application</a>
+    </div>
+
+    <ul class="navbar-nav" *ngIf="this.hardcoadedAuthenticateService.isUserLoggedIn()">
+      <li>
+        <a class="nav-link" routerLink="/welcome">Home</a>
+      </li>
+      <li>
+        <a class="nav-link" routerLink="/todos">TODOs</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav navbar-collapse justify-content-end">
+      <li>
+        <a *ngIf="!this.hardcoadedAuthenticateService.isUserLoggedIn()" class="nav-link" routerLink="/login">Login</a>
+      </li>
+      <li *ngIf="this.hardcoadedAuthenticateService.isUserLoggedIn()">
+        <a class="nav-link" (click)="this.hardcoadedAuthenticateService.logout()" routerLink="/">Logout</a>
+      </li>
+    </ul>
+  </nav>
+</header>

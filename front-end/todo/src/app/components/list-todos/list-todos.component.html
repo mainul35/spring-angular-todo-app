@@ -1,17 +1,21 @@
-<table>
-  <caption>My todo List</caption>
-  <thead>
+<h1>My TODOs</h1>
+<div class="container">
+  <table class="table">
+    <thead>
     <tr>
       <th>ID</th>
+      <th>Date</th>
       <th>Desciption</th>
+      <th>Is Done?</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <tr *ngFor="let todo of todos">
       <td>{{todo.id}}</td>
       <td>{{todo.targetDate | date}}</td> <!-- Angular pipe (|) -->
       <td>{{todo.description | uppercase}}</td>
       <td>{{todo.done}}</td>
     </tr>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
