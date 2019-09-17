@@ -1,6 +1,6 @@
-package com.mainul35.model
+package model
 
-class AccessToken {
+class RefreshToken {
     Long id
     String token
     Date creationDate

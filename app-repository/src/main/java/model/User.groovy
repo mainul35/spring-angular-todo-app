@@ -1,4 +1,4 @@
-package com.mainul35.model
+package model
 
 class User {
     Long id
