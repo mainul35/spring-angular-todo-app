@@ -1,11 +1,9 @@
-package com.mainul35.beans
+package com.mainul35.beans;
 
-import org.springframework.context.annotation.Bean
-import org.springframework.stereotype.Component
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component;
 
-
-class DummyBeanDefinitions {
+@Component
+public class DummyBeanDefinitions {
     /*static void main(String[] args) {
         List<Integer> list = [73, 67, 38, 33]
         println gradingStudents(list)
@@ -24,4 +22,8 @@ class DummyBeanDefinitions {
         });
         return grades;
     }*/
+
+    public void print() {
+        System.out.println("Printing....");
+    }
 }
