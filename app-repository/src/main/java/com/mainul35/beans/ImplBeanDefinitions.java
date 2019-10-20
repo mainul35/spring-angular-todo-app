@@ -9,7 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource("classpath*:application.properties")
+@PropertySource("classpath:application.properties")
 class ImplBeanDefinitions {
 
     @Value("${spring.datasource.url}")
