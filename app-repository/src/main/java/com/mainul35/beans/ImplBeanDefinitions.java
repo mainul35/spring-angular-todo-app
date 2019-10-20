@@ -24,6 +24,9 @@ class ImplBeanDefinitions {
     @Value("${postgres.driverClassName}")
     private String driverClassName;
 
+    @Value("${db.schema}")
+    private String schemaName;
+
     @Bean
     DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -31,6 +34,7 @@ class ImplBeanDefinitions {
         dataSource.setUrl(datasourceUrl);
         dataSource.setUsername(datasourceUsername);
         dataSource.setPassword(datasourcePassword);
+        dataSource.setSchema(schemaName);
         return dataSource;
     }
 }
