@@ -1,64 +1,96 @@
 package com.mainul35.repository;
 
-import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-@PropertySource("classpath:application.properties")
 public abstract class CriteriaQueryRepository <T>{
-
     private SessionFactory sessionFactory = null;
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
+    private String DS_PROP_FILE_NAME;
+    private String DS_URL = "datasource.url";
+    private String DS_USER = "datasource.username";
+    private String DS_PASSWORD = "datasource.password";
+    private String DS_DRIVER_CLASS = "datasource.driverClassName";
+    private String DS_SCHEMA = "datasource.schema";
+
+    private String HIBERNATE_FILE_NAME= "hibernate/hibernate-dev.properties";
+    private String HBM2DDL = "hibernate.hbm2ddl.auto";
+    private String HBM_DIALECT = "hibernate.dialect";
 
     private Session session;
     private CriteriaBuilder criteriaBuilder;
     private Class<T> model;
 
+    DriverManagerDataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        Properties properties = getBuiltProperties("db/db-"+activeProfile+".properties");
+        dataSource.setDriverClassName(properties.get(DS_DRIVER_CLASS).toString());
+        dataSource.setUrl(properties.get(DS_URL).toString());
+        dataSource.setUsername(properties.get(DS_USER).toString());
+        dataSource.setPassword(properties.get(DS_PASSWORD).toString());
+        return dataSource;
+    }
+
     protected Session getSession() {
-        this.session = getSessionFactory().getCurrentSession();
+        this.session = createAndGetLocalSessionFactoryBean().getCurrentSession();
         return Optional
                 .of(this.session)
                 .isPresent()
                 ? this.session
-                : getSessionFactory().openSession();
+                : createAndGetLocalSessionFactoryBean().openSession();
     }
 
     protected CriteriaBuilder getCriteriaBuilder() {
-        return getSession().getCriteriaBuilder();
+        Session session = getSession();
+        session.beginTransaction();
+        return session.getCriteriaBuilder();
     }
 
-    protected CriteriaQuery<T> getCriteriaQuery () {
-        this.criteriaBuilder = getSession().getCriteriaBuilder();
+    protected CriteriaQuery<T> getCriteriaQuery (Class<T> model) {
+        this.model = model;
+        try {
+            this.criteriaBuilder = getCriteriaBuilder();
+        } catch (Exception e) {
+            System.err.println("Failed to establish connection with database");
+            e.printStackTrace();
+        }
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(model);
         return criteriaQuery;
     }
 
-    protected SessionFactory getSessionFactory(){
-        if(sessionFactory == null) {
+    protected EntityManager entityManager(){
+        return createAndGetLocalSessionFactoryBean().createEntityManager();
+    }
+
+    protected SessionFactory createAndGetLocalSessionFactoryBean() {
+        if (this.sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
-                configuration.setProperties(getBuiltProperties("application.properties"));
+                // Hibernate settings equivalent to hibernate.cfg.xml's properties
+                Properties settings = getBuiltProperties("hibernate/hibernate-"+activeProfile+".properties");
 
-                List<Class<?>> classes = EntityScanner
-                        .scanPackages("com.mainul35.model").result();
-
-                for (Class<?> annotatedClass : classes) {
-                    configuration.addAnnotatedClass(annotatedClass);
-                }
-                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties()).build();
-                sessionFactory = configuration.buildSessionFactory();
+                configuration.setProperties(settings);
+                /*if (model != null) {
+                    configuration.addAnnotatedClass(model);
+                }*/
+                StandardServiceRegistryBuilder serviceRegistry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties());
+                sessionFactory = configuration.buildSessionFactory(serviceRegistry.build());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,11 +98,15 @@ public abstract class CriteriaQueryRepository <T>{
         return sessionFactory;
     }
 
-    protected Properties getBuiltProperties(String propertyFileName) throws IOException {
+    protected Properties getBuiltProperties(String propertyFileName) {
         Properties properties = new Properties();
         InputStream input = CriteriaQueryRepository.class
                 .getClassLoader().getResourceAsStream(propertyFileName);
-        properties.load(input);
+        try {
+            properties.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return properties;
     }

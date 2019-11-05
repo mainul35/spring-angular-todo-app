@@ -1,9 +1,19 @@
 package com.mainul35.beans;
 
+import com.mainul35.model.User;
+import com.mainul35.repository.CriteriaQueryRepository;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
+
 @Component
-public class DummyBeanDefinitions {
+@PropertySource("classpath:application.properties")
+public class DummyBeanDefinitions extends CriteriaQueryRepository <User>{
     /*static void main(String[] args) {
         List<Integer> list = [73, 67, 38, 33]
         println gradingStudents(list)
@@ -24,6 +34,13 @@ public class DummyBeanDefinitions {
     }*/
 
     public void print() {
-        System.out.println("Printing....");
+        /*CriteriaBuilder builder = getCriteriaBuilder();*/
+        CriteriaQuery<User> query = getCriteriaQuery(User.class);
+        Root<User> userRoot = query.from(User.class);
+        query.select(userRoot);
+        TypedQuery<User> q = entityManager().createQuery(query);
+
+        List<User> users = q.getResultList();
+        System.out.println(users.toString());
     }
 }

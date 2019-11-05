@@ -1,3 +1,4 @@
+/*
 package com.mainul35.beans;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -38,3 +39,4 @@ class ImplBeanDefinitions {
         return dataSource;
     }
 }
+*/
