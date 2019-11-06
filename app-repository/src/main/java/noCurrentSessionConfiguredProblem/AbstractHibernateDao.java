@@ -1,3 +1,4 @@
+/*
 package noCurrentSessionConfiguredProblem;
 
 import org.hibernate.Session;
@@ -68,3 +69,4 @@ public abstract class AbstractHibernateDao<T extends Serializable>
         return sessionFactory.getCurrentSession();
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package noCurrentSessionConfiguredProblem;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,3 +19,4 @@ public class GenericHibernateDao<T extends Serializable>
         super(factory);
     }
 }
+*/

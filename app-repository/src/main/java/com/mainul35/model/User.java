@@ -3,14 +3,13 @@ package com.mainul35.model;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "user")
+@Entity(name = "user")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private Integer id;
     @Column
-    String name;
+    private String name;
 
     public int getId() {
         return id;

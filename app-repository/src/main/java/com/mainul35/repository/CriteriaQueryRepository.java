@@ -1,5 +1,6 @@
 package com.mainul35.repository;
 
+import com.mainul35.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -77,6 +78,11 @@ public abstract class CriteriaQueryRepository <T>{
         return createAndGetLocalSessionFactoryBean().createEntityManager();
     }
 
+    protected EntityManager entityManager(Class<T> model){
+        this.model = model;
+        return createAndGetLocalSessionFactoryBean().createEntityManager();
+    }
+
     protected SessionFactory createAndGetLocalSessionFactoryBean() {
         if (this.sessionFactory == null) {
             try {
@@ -85,9 +91,9 @@ public abstract class CriteriaQueryRepository <T>{
                 Properties settings = getBuiltProperties("hibernate/hibernate-"+activeProfile+".properties");
 
                 configuration.setProperties(settings);
-                /*if (model != null) {
-                    configuration.addAnnotatedClass(model);
-                }*/
+                if (model != null) {
+                    configuration.addAnnotatedClass(User.class);
+                }
                 StandardServiceRegistryBuilder serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry.build());

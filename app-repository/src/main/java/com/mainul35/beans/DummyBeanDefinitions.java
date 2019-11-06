@@ -5,7 +5,7 @@ import com.mainul35.repository.CriteriaQueryRepository;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.TypedQuery;
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -35,12 +35,23 @@ public class DummyBeanDefinitions extends CriteriaQueryRepository <User>{
 
     public void print() {
         /*CriteriaBuilder builder = getCriteriaBuilder();*/
-        CriteriaQuery<User> query = getCriteriaQuery(User.class);
+        /*CriteriaQuery<User> query = getCriteriaQuery(User.class);
         Root<User> userRoot = query.from(User.class);
         query.select(userRoot);
         TypedQuery<User> q = entityManager().createQuery(query);
 
-        List<User> users = q.getResultList();
-        System.out.println(users.toString());
+        List<User> users = q.getResultList();*/
+
+        EntityManager entityManager = entityManager(User.class);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<User> cq = builder.createQuery( User.class );
+        Root<User> root = cq.from( User.class );
+/*        criteria.select( root );
+        criteria.where( builder.equal( root.get( "user.name" ), "John Doe" ) );
+
+        List<User> users = entityManager.createQuery( "select u from com.mainul35.model.User u"
+ ).getResultList();
+        System.out.println(users.toString());*/
     }
 }
