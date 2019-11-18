@@ -47,11 +47,10 @@ public class DummyBeanDefinitions extends CriteriaQueryRepository <User>{
 
         CriteriaQuery<User> cq = builder.createQuery( User.class );
         Root<User> root = cq.from( User.class );
-/*        criteria.select( root );
-        criteria.where( builder.equal( root.get( "user.name" ), "John Doe" ) );
+        cq.select( root );
+        cq.where(builder.equal( root.get( "name" ), "John Doe" ));
 
-        List<User> users = entityManager.createQuery( "select u from com.mainul35.model.User u"
- ).getResultList();
-        System.out.println(users.toString());*/
+        List<User> users = entityManager.createQuery(cq).getResultList();
+        System.out.println(users.toString());
     }
 }

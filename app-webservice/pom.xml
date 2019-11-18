@@ -7,7 +7,7 @@
     <artifactId>app-webservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>app-webservice</name>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <description>todo-application-backend-service</description>
 
     <parent>
@@ -55,12 +55,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -71,6 +65,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.app.Main</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
