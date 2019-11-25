@@ -1,16 +1,17 @@
 package com.mainul35.repository;
 
-import com.mainul35.model.User;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
@@ -37,12 +38,12 @@ public abstract class CriteriaQueryRepository <T>{
     private CriteriaBuilder criteriaBuilder;
     private Class<T> model;
 
-    DriverManagerDataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    public DataSource dataSource() throws PropertyVetoException {
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
         Properties properties = getBuiltProperties("db/db-"+activeProfile+".properties");
-        dataSource.setDriverClassName(properties.get(DS_DRIVER_CLASS).toString());
-        dataSource.setUrl(properties.get(DS_URL).toString());
-        dataSource.setUsername(properties.get(DS_USER).toString());
+        dataSource.setDriverClass(properties.get(DS_DRIVER_CLASS).toString());
+        dataSource.setJdbcUrl(properties.get(DS_URL).toString());
+        dataSource.setUser(properties.get(DS_USER).toString());
         dataSource.setPassword(properties.get(DS_PASSWORD).toString());
         return dataSource;
     }
@@ -92,7 +93,7 @@ public abstract class CriteriaQueryRepository <T>{
 
                 configuration.setProperties(settings);
                 if (model != null) {
-                    configuration.addAnnotatedClass(User.class);
+                    configuration.addAnnotatedClass(model);
                 }
                 StandardServiceRegistryBuilder serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties());
