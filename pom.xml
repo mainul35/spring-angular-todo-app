@@ -19,6 +19,7 @@
     <modules>
         <module>app-repository</module>
         <module>app-webservice</module>
+        <module>app-security</module>
     </modules>
 
     <dependencies>

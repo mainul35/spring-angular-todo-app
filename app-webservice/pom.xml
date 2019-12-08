@@ -27,6 +27,11 @@
                 <artifactId>app-repository</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>com.mainul35</groupId>
+                <artifactId>app-security</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>

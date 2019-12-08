@@ -7,10 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.mainul35.controller", "com.mainul35.beans"})
 public class TodoApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
     @Autowired
@@ -23,6 +21,7 @@ public class TodoApplication extends SpringBootServletInitializer implements Com
     @Override
     public void run(String... args) throws Exception {
         System.out.println("App running");
+//        beanDefinitions.createUser();
         beanDefinitions.print();
     }
 
